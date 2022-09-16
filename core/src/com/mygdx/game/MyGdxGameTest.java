@@ -3,33 +3,33 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import helpers.GameInfo;
+import scenes.MainMenu;
+
 public class MyGdxGameTest extends Game {
-	SpriteBatch batch;
-	Texture img;
-	Texture img2;
+	private SpriteBatch batch;
 	
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("Game BG.png");
-		img2 = new Texture("badlogic.jpg");
+		this.batch = new SpriteBatch();
+		setScreen(new MainMenu(this));
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.draw(img2, (480 / 2) - img2.getWidth() / 2, (800 / 2) - img2.getHeight() / 2);
-		batch.end();
+		super.render();
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+	}
+
+	public SpriteBatch getBatch() {
+		return this.batch;
 	}
 }
