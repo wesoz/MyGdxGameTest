@@ -2,6 +2,7 @@ package scenes;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.MyGdxGameTest;
 
+import clouds.Cloud;
 import helpers.GameInfo;
 import player.Player;
 
@@ -37,16 +39,28 @@ public class MainMenu implements Screen {
         this.bg = new Texture("Game BG.png");
         this.world = new World(new Vector2(0, -9.8f), true);
         this.player = new Player(this.world, "Player 1.png", GameInfo.WIDTH / 2,GameInfo.HEIGHT / 2);
+
+        Cloud c = new Cloud(this.world);
     }
 
     // Same as create() in Main class
     @Override
     public void show() {
-        System.out.println("SHOW");
+    }
+
+    public void update(float dt) {
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            // this.player.getBody().applyLinearImpulse(new Vector2(-0.1f,0), this.player.getBody().getWorldCenter(), true);
+            this.player.getBody().applyForce(new Vector2(-5f,0), this.player.getBody().getWorldCenter(), true);
+        } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            // this.player.getBody().applyLinearImpulse(new Vector2(0.1f,0), this.player.getBody().getWorldCenter(), true);
+            this.player.getBody().applyForce(new Vector2(5f,0), this.player.getBody().getWorldCenter(), true);
+        }
     }
 
     @Override
     public void render(float delta) {
+        this.update(delta);
         ScreenUtils.clear(1, 0, 0, 1);
 
         this.player.updatePlayer();

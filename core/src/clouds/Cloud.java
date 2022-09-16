@@ -1,4 +1,4 @@
-package player;
+package clouds;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,27 +11,26 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import helpers.GameInfo;
 
-public class Player extends Sprite {
-
+public class Cloud extends Sprite {
     private World world;
     private Body body;
 
-    public Player(World world, String name, float x, float y) {
-        super(new Texture(name));
+    public Cloud(World world) {
+        super(new Texture("Cloud 1.png"));
+        super.setPosition(GameInfo.WIDTH / 2, GameInfo.HEIGHT / 2 - 130);
         this.world = world;
-        setPosition(x - super.getWidth() / 2f, y - super.getHeight() / 2f + 250f);
-        this.createBody();
+        createBody();
     }
 
     void createBody() {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(super.getX() / GameInfo.PPM, super.getY() / GameInfo.PPM);
 
         this.body = this.world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox((super.getWidth() / 2) / GameInfo.PPM, (super.getHeight() / 2) / GameInfo.PPM);
+        shape.setAsBox((super.getWidth()) / GameInfo.PPM, (super.getHeight() / 2) / GameInfo.PPM);
 
         // Define shape and mass of the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -41,13 +40,5 @@ public class Player extends Sprite {
         Fixture fixture = this.body.createFixture(fixtureDef);
 
         shape.dispose();
-    }
-
-    public void updatePlayer() {
-        this.setPosition(this.body.getPosition().x * GameInfo.PPM, this.body.getPosition().y * GameInfo.PPM);
-    }
-
-    public Body getBody() {
-        return this.body;
     }
 }
