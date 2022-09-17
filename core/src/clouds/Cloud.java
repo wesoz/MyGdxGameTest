@@ -38,6 +38,9 @@ public class Cloud extends Sprite {
         fixtureDef.density = 1;
 
         Fixture fixture = this.body.createFixture(fixtureDef);
+        fixture.setUserData("Cloud");
+        // Makes the bodies detect collision but get through
+        fixture.setSensor(true);
 
         shape.dispose();
     }

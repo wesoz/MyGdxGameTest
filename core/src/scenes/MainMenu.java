@@ -8,6 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.MyGdxGameTest;
@@ -16,7 +21,7 @@ import clouds.Cloud;
 import helpers.GameInfo;
 import player.Player;
 
-public class MainMenu implements Screen {
+public class MainMenu implements Screen, ContactListener {
 
     private MyGdxGameTest game;
     private Texture bg;
@@ -35,9 +40,9 @@ public class MainMenu implements Screen {
         box2DCamera.position.set(GameInfo.WIDTH / 2f,GameInfo.HEIGHT / 2f, 0);
 
         debugRenderer = new Box2DDebugRenderer();
-
-        this.bg = new Texture("Game BG.png");
         this.world = new World(new Vector2(0, -9.8f), true);
+        this.world.setContactListener(this);
+        this.bg = new Texture("Game BG.png");
         this.player = new Player(this.world, "Player 1.png", GameInfo.WIDTH / 2,GameInfo.HEIGHT / 2);
 
         Cloud c = new Cloud(this.world);
@@ -99,5 +104,35 @@ public class MainMenu implements Screen {
     public void dispose() {
         this.bg.dispose();
         this.player.getTexture().dispose();
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        Fixture firstBody, secondBody;
+
+        if (contact.getFixtureA().getUserData().equals("Player")) {
+            firstBody = contact.getFixtureA();
+            secondBody = contact.getFixtureB();
+        } else {
+            firstBody = contact.getFixtureB();
+            secondBody = contact.getFixtureA();
+        }
+
+        System.out.println("The name of the first body is " + firstBody.getUserData());
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+
     }
 }
